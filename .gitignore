@@ -43,5 +43,6 @@ secrets/
 .vscode/
 .idea/
 .claude/
+CLAUDE.md
 tmp/
 *.log
