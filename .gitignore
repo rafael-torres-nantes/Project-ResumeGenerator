@@ -36,6 +36,9 @@ personal_info/*.json
 *.pem
 secrets/
 
+# Ignorar PDFs residuais na raiz
+*.pdf
+
 # IDE e ferramentas
 .vscode/
 .idea/
