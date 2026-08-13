@@ -47,12 +47,16 @@ class CurriculumEvaluator:
         try:
             from google import genai
             from google.genai import types
-        except ImportError:
-            logger.error("Pacote 'google-genai' não encontrado. Instale com: pip install google-genai")
+            from dotenv import load_dotenv
+            
+            # Carrega o .env se existir no diretório atual
+            load_dotenv()
+        except ImportError as e:
+            logger.error("Dependência não encontrada: %s. Instale com: pip install google-genai python-dotenv", e)
             return ""
 
         if "GEMINI_API_KEY" not in os.environ:
-            logger.error("Variável GEMINI_API_KEY não configurada no ambiente.")
+            logger.error("Variável GEMINI_API_KEY não configurada no ambiente ou no arquivo .env.")
             return ""
 
         curriculum_text = self._read_curriculum_text()
