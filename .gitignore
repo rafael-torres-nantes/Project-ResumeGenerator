@@ -1,0 +1,44 @@
+# Ambientes virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pastas de configuração local e dados sensíveis
+output/
+personal_info/*.json
+!personal_info/*.example.json
+.env
+.env.local
+.env.*
+*.pem
+secrets/
+
+# IDE e ferramentas
+.vscode/
+.idea/
+.claude/
+tmp/
+*.log

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh *)",
+      "Bash(python fetch_repos.py --limit 200 --no-forks)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('repos.json',encoding='utf-8'\\)\\); print\\(json.dumps\\({'github_user':d['github_user'],'total_repos':d['total_repos'],'sample':d['repositories'][:3]},ensure_ascii=False,indent=2\\)\\)\")"
+    ]
+  }
+}

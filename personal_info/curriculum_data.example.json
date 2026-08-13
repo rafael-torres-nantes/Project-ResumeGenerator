@@ -1,0 +1,46 @@
+{
+  "header": {
+    "name": "NOME SOBRENOME",
+    "title": "Title · Skills",
+    "contact": "email@example.com · (00) 00000-0000 · Cidade, Estado · Idioma",
+    "links": "linkedin.com/in/usuario · github.com/usuario"
+  },
+  "profile": {
+    "normal_1": "Engenheiro com ",
+    "bold": "experiência em XPTO",
+    "normal_2": " atuando com XYZ."
+  },
+  "experience": [
+    {
+      "title": "Empresa — Cargo",
+      "period": "Jan 2020 – Dez 2021",
+      "bullets": [
+        [
+          ["Fez ", false],
+          ["algo muito importante", true],
+          [" usando ferramentas.", false]
+        ]
+      ]
+    }
+  ],
+  "projects": [
+    [
+      ["NomeDoProjeto", true],
+      [" — descrição breve do que foi feito e ferramentas.", false]
+    ]
+  ],
+  "education": [
+    [
+      ["Curso", true],
+      [" — Universidade · ", false],
+      ["status", true],
+      [".", false]
+    ]
+  ],
+  "skills": [
+    {
+      "label": "Categoria",
+      "items": "Item 1 · Item 2 · Item 3"
+    }
+  ]
+}
