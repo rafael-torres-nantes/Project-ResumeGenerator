@@ -46,3 +46,8 @@ secrets/
 CLAUDE.md
 tmp/
 *.log
+
+# Saída do graphify
+graphify-out/
+.graphifyignore
+.graphify/
