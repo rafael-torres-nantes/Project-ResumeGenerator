@@ -33,32 +33,18 @@ class CurriculumEvaluator:
             raise FileNotFoundError(f"Template não encontrado: {prompt_path}")
         return prompt_path.read_text(encoding="utf-8")
 
-    def evaluate(self, prompt_filename: str) -> str:
+    def evaluate(self, prompt_filename: str, provider: str = "gemini") -> str:
         """Avalia o currículo usando um template específico.
 
-        Requer a variável de ambiente GEMINI_API_KEY.
+        Requer as variáveis de ambiente pertinentes (GEMINI_API_KEY ou ANTHROPIC_API_KEY).
 
         Args:
             prompt_filename: Nome do arquivo de template (ex: 01_auditoria_curriculo.md).
+            provider: Provedor da IA ('gemini' ou 'claude').
 
         Returns:
             A resposta da IA com as sugestões.
         """
-        try:
-            from google import genai
-            from google.genai import types
-            from dotenv import load_dotenv
-            
-            # Carrega o .env se existir no diretório atual
-            load_dotenv()
-        except ImportError as e:
-            logger.error("Dependência não encontrada: %s. Instale com: pip install google-genai python-dotenv", e)
-            return ""
-
-        if "GEMINI_API_KEY" not in os.environ:
-            logger.error("Variável GEMINI_API_KEY não configurada no ambiente ou no arquivo .env.")
-            return ""
-
         curriculum_text = self._read_curriculum_text()
         prompt_text = self._read_prompt(prompt_filename)
 
@@ -67,13 +53,53 @@ class CurriculumEvaluator:
             f"--- INÍCIO DO CURRÍCULO ---\n{curriculum_text}\n--- FIM DO CURRÍCULO ---"
         )
 
-        logger.info("Enviando requisição ao Gemini (gemini-2.5-pro)...")
-        client = genai.Client()
-        response = client.models.generate_content(
-            model="gemini-2.5-pro",
-            contents=full_prompt,
-        )
-        return response.text
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+
+        if provider == "gemini":
+            try:
+                from google import genai
+            except ImportError as e:
+                logger.error("Dependência não encontrada. Instale com: pip install google-genai", e)
+                return ""
+
+            if "GEMINI_API_KEY" not in os.environ:
+                logger.error("Variável GEMINI_API_KEY não configurada no ambiente ou no arquivo .env.")
+                return ""
+
+            logger.info("Enviando requisição ao Gemini (gemini-2.5-pro)...")
+            client = genai.Client()
+            response = client.models.generate_content(
+                model="gemini-2.5-pro",
+                contents=full_prompt,
+            )
+            return response.text
+
+        elif provider == "claude":
+            try:
+                import anthropic
+            except ImportError as e:
+                logger.error("Dependência não encontrada. Instale com: pip install anthropic", e)
+                return ""
+
+            if "ANTHROPIC_API_KEY" not in os.environ:
+                logger.error("Variável ANTHROPIC_API_KEY não configurada no ambiente ou no arquivo .env.")
+                return ""
+
+            logger.info("Enviando requisição ao Claude (claude-3-7-sonnet-20250219)...")
+            client = anthropic.Anthropic()
+            response = client.messages.create(
+                model="claude-3-7-sonnet-20250219",
+                max_tokens=4096,
+                messages=[{"role": "user", "content": full_prompt}]
+            )
+            return response.content[0].text
+        else:
+            logger.error(f"Provedor {provider} não suportado.")
+            return ""
 
 
 if __name__ == "__main__":

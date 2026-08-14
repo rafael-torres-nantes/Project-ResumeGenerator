@@ -32,6 +32,7 @@ def main() -> None:
     # Comando de avaliador headless
     parser_eval = subparsers.add_parser("evaluate", help="Audita o currículo usando os prompts template")
     parser_eval.add_argument("--prompt", "-p", default="01_auditoria_curriculo.md", help="Nome do arquivo de prompt na pasta prompts_template")
+    parser_eval.add_argument("--provider", choices=["gemini", "claude"], default="gemini", help="Provedor de IA (gemini ou claude)")
     
     args = parser.parse_args()
     
@@ -52,10 +53,10 @@ def main() -> None:
             prompts_dir = base_dir / "prompts_template"
             evaluator = CurriculumEvaluator(data_path=data_path, prompts_dir=prompts_dir)
             
-            logger.info("Iniciando avaliação com o prompt: %s", args.prompt)
-            result = evaluator.evaluate(args.prompt)
+            logger.info("Iniciando avaliação com o prompt: %s via %s", args.prompt, args.provider)
+            result = evaluator.evaluate(args.prompt, provider=args.provider)
             if result:
-                out_file = base_dir / "output" / f"avaliacao_{args.prompt.replace('.md', '')}.md"
+                out_file = base_dir / "output" / f"avaliacao_{args.prompt.replace('.md', '')}_{args.provider}.md"
                 out_file.parent.mkdir(parents=True, exist_ok=True)
                 out_file.write_text(result, encoding="utf-8")
                 logger.info("Avaliação salva em: %s", out_file)
